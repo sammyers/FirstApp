@@ -1,5 +1,6 @@
 package core.four.sam.firstapp;
 
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -16,6 +17,8 @@ public class TodoListFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_main, container, false);
+        View myView = inflater.inflate(R.layout.fragment_main, container, false);
+        FloatingActionButton fab = (FloatingActionButton) myView.findViewById(R.id.settings_button);
+        return myView;
     }
 }
