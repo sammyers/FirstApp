@@ -17,8 +17,6 @@ public class TodoListFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View myView = inflater.inflate(R.layout.fragment_main, container, false);
-        FloatingActionButton fab = (FloatingActionButton) myView.findViewById(R.id.settings_button);
-        return myView;
+        return inflater.inflate(R.layout.fragment_main, container, false);
     }
 }
