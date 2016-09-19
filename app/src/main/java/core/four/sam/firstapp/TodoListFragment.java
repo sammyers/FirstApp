@@ -23,7 +23,7 @@ public class TodoListFragment extends Fragment {
 
         ArrayList<String> items = new ArrayList<String>();
         items.add("Get");
-        items.add("Good");
+        items.add("Good"); // there should be five todo items
 
         ListView listView = (ListView) myView.findViewById(R.id.todoitems);
         listView.setAdapter(new TodoAdapter(getContext(), items));

@@ -22,6 +22,8 @@ public class SettingsFragment extends Fragment {
 
         for (int i = 0; i < settings.length; i++) {
             final int index = i;
+            // this should be changing the background color of the activity, not the fragmnet.
+            // View activityView = getActivity().findViewById(R.id.idOfLayoutInMainActivity);
             myView.findViewById(settings[i]).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
