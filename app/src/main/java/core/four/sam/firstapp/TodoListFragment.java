@@ -5,17 +5,12 @@ import android.content.DialogInterface;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.TextView;
-
 import java.util.ArrayList;
 
 /**
@@ -47,8 +42,6 @@ public class TodoListFragment extends Fragment {
     public void addTodo() {
         final EditText todoInput = new EditText(getContext());
 
-        final String newTodo;
-
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext())
                 .setView(todoInput)
                 .setCancelable(true)
@@ -68,6 +61,7 @@ public class TodoListFragment extends Fragment {
                     }
                 });
         AlertDialog dialog = builder.create();
+        // Pop up keyboard automatically
         dialog.getWindow().setSoftInputMode(
                 WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE
         );

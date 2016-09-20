@@ -49,6 +49,7 @@ public class TodoAdapter extends ArrayAdapter<String> {
         return convertView;
     }
 
+    // Return the onclick listener as a closure for an item at a given index
     private View.OnClickListener getEditListener(int position) {
         final int index = position;
         return new View.OnClickListener() {
@@ -59,6 +60,7 @@ public class TodoAdapter extends ArrayAdapter<String> {
         };
     }
 
+    // Same as above, but for the checkbox
     private View.OnClickListener getCompleteListener(int position, View convertView) {
         final int index = position;
         final View view = convertView;
@@ -70,6 +72,7 @@ public class TodoAdapter extends ArrayAdapter<String> {
         };
     }
 
+    // The actual callback function for editing an item
     public void editTodo(int position) {
         final int index = position;
         String todoText = items.get(position);
@@ -104,7 +107,9 @@ public class TodoAdapter extends ArrayAdapter<String> {
         final TodoAdapter adapter = this;
         final View view = convertView;
         final int index = position;
+        // Fade out and remove the item
         view.animate().alpha(0f).setDuration(500).withEndAction(new Runnable() {
+            // Callback for when the transition completes so it's async
             @Override
             public void run() {
                 view.setVisibility(View.GONE);
