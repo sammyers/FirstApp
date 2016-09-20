@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -32,34 +33,6 @@ public class TodoAdapter extends ArrayAdapter<String> {
 
         TextView itemText = (TextView) convertView.findViewById(R.id.item_text);
         itemText.setText(item);
-        itemText.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                final TextView thisTodo = (TextView) v;
-                final EditText todoInput = new EditText(getContext());
-                // Set initial value of dialog to existing text
-                todoInput.setText(thisTodo.getText());
-
-                AlertDialog.Builder builder = new AlertDialog.Builder(getContext())
-                        .setView(todoInput)
-                        .setCancelable(true)
-                        .setTitle(R.string.todo_edit_dialog_title)
-                        .setPositiveButton(R.string.todo_ok_button_text, new DialogInterface.OnClickListener() {
-                            // callback for Ok button
-                            @Override
-                            public void onClick(DialogInterface dialog, int whichButton) {
-                                thisTodo.setText(todoInput.getText().toString());
-                                dialog.dismiss();
-                            }
-                        }).setNegativeButton(R.string.todo_cancel_button_text, new DialogInterface.OnClickListener() {
-                            // callback for Cancel button
-                            @Override
-                            public void onClick(DialogInterface dialog, int whichButton) {
-                                dialog.cancel();
-                            }
-                        });
-                AlertDialog dialog = builder.show();
-            }
-        });
 
         return convertView;
     }
