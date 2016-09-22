@@ -5,17 +5,12 @@ import android.content.DialogInterface;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.TextView;
-
 import java.util.ArrayList;
 
 /**
@@ -40,47 +35,12 @@ public class TodoListFragment extends Fragment {
 
         ListView listView = (ListView) myView.findViewById(R.id.todoitems);
         listView.setAdapter(new TodoAdapter(getContext(), items));
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-                final int index = position;
-                final String oldText = (String) parent.getItemAtPosition(index);
-                final EditText todoInput = new EditText(getContext());
-                // Set initial value of dialog to existing text
-                todoInput.setText(oldText);
-
-                AlertDialog.Builder builder = new AlertDialog.Builder(getContext())
-                        .setView(todoInput)
-                        .setCancelable(true)
-                        .setTitle(R.string.todo_edit_dialog_title)
-                        .setPositiveButton(R.string.todo_ok_button_text, new DialogInterface.OnClickListener() {
-                            // callback for Ok button
-                            @Override
-                            public void onClick(DialogInterface dialog, int whichButton) {
-                                items.set(index, todoInput.getText().toString());
-                                dialog.dismiss();
-                            }
-                        }).setNegativeButton(R.string.todo_cancel_button_text, new DialogInterface.OnClickListener() {
-                            // callback for Cancel button
-                            @Override
-                            public void onClick(DialogInterface dialog, int whichButton) {
-                                dialog.cancel();
-                            }
-                        });
-                AlertDialog dialog = builder.create();
-                dialog.getWindow().setSoftInputMode(
-                        WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE
-                );
-                dialog.show();
-            }
-        });
 
         return myView;
     }
 
     public void addTodo() {
         final EditText todoInput = new EditText(getContext());
-
-        final String newTodo;
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext())
                 .setView(todoInput)
@@ -101,6 +61,7 @@ public class TodoListFragment extends Fragment {
                     }
                 });
         AlertDialog dialog = builder.create();
+        // Pop up keyboard automatically
         dialog.getWindow().setSoftInputMode(
                 WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE
         );
