@@ -1,3 +1,4 @@
+// I noticed and am humored by this
 package core.four.sam.firstapp;
 
 import android.os.Bundle;
