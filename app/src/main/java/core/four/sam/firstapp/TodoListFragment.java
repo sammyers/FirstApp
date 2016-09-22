@@ -18,6 +18,7 @@ import java.util.ArrayList;
  */
 public class TodoListFragment extends Fragment {
     private ArrayList<String> items;
+    private TodoAdapter adapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -31,10 +32,12 @@ public class TodoListFragment extends Fragment {
             }
         });
 
-        this.items = new ArrayList<String>();
+        // In Java7+ (I think, maybe 8+) you don't have to re-specify the class of the objects of the ArrayList
+        this.items = new ArrayList<>();
+        adapter = new TodoAdapter(getContext(), items);
 
         ListView listView = (ListView) myView.findViewById(R.id.todoitems);
-        listView.setAdapter(new TodoAdapter(getContext(), items));
+        listView.setAdapter(adapter);
 
         return myView;
     }
@@ -44,13 +47,18 @@ public class TodoListFragment extends Fragment {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext())
                 .setView(todoInput)
-                .setCancelable(true)
+                .setCancelable(true) // If you have setNegativeButton in which you call dialog.cancel, this line becomes redundant
                 .setTitle(R.string.todo_edit_dialog_title)
                 .setPositiveButton(R.string.todo_ok_button_text, new DialogInterface.OnClickListener() {
                     // callback for Ok button
                     @Override
                     public void onClick(DialogInterface dialog, int whichButton) {
                         items.add(todoInput.getText().toString());
+                        /* FUNCTIONALITY POINTS DEDUCTED.
+                        You needed this line below, or else the adapter will not update, and therefore
+                        the new element will not be displayed.
+                         */
+                        adapter.notifyDataSetChanged();
                         dialog.dismiss();
                     }
                 }).setNegativeButton(R.string.todo_cancel_button_text, new DialogInterface.OnClickListener() {

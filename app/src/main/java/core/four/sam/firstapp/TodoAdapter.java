@@ -49,9 +49,9 @@ public class TodoAdapter extends ArrayAdapter<String> {
         return convertView;
     }
 
+    /** You can specify arguments as final in the method declaration **/
     // Return the onclick listener as a closure for an item at a given index
-    private View.OnClickListener getEditListener(int position) {
-        final int index = position;
+    private View.OnClickListener getEditListener(final int index) {
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -61,9 +61,7 @@ public class TodoAdapter extends ArrayAdapter<String> {
     }
 
     // Same as above, but for the checkbox
-    private View.OnClickListener getCompleteListener(int position, View convertView) {
-        final int index = position;
-        final View view = convertView;
+    private View.OnClickListener getCompleteListener(final int index, final View view) {
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -72,9 +70,8 @@ public class TodoAdapter extends ArrayAdapter<String> {
         };
     }
 
-    // The actual callback function for editing an item
-    public void editTodo(int position) {
-        final int index = position;
+    // If just for use within class, declare private
+    private void editTodo(final int position) {
         String todoText = items.get(position);
         final EditText todoInput = new EditText(context);
         todoInput.setText(todoText);
@@ -87,7 +84,7 @@ public class TodoAdapter extends ArrayAdapter<String> {
                 .setPositiveButton(R.string.todo_ok_button_text, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        items.set(index, todoInput.getText().toString());
+                        items.set(position, todoInput.getText().toString());
                         dialog.dismiss();
                     }
                 }).setNegativeButton(R.string.todo_cancel_button_text, new DialogInterface.OnClickListener() {
@@ -103,18 +100,19 @@ public class TodoAdapter extends ArrayAdapter<String> {
         dialog.show();
     }
 
-    public void markComplete(int position, View convertView) {
-        final TodoAdapter adapter = this;
-        final View view = convertView;
-        final int index = position;
+    // If just for use within class, declare private
+    private void markComplete(final int index, final View view) {
         // Fade out and remove the item
         view.animate().alpha(0f).setDuration(500).withEndAction(new Runnable() {
             // Callback for when the transition completes so it's async
             @Override
             public void run() {
                 view.setVisibility(View.GONE);
+
+                /** There is a bug when removing an element from not the bottom **/
                 items.remove(index);
-                adapter.notifyDataSetChanged();
+                // Since you're in the adapter, this method is inherited and can just be called.
+                notifyDataSetChanged();
             }
         });
     }
