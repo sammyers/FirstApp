@@ -13,11 +13,15 @@ import android.widget.EditText;
 import android.widget.ListView;
 import java.util.ArrayList;
 
+import core.four.sam.firstapp.database.Todo;
+import core.four.sam.firstapp.database.TodoDatabaseHelper;
+
 /**
  * A placeholder fragment containing a simple view.
  */
 public class TodoListFragment extends Fragment {
-    private ArrayList<String> items;
+    private TodoDatabaseHelper dbHelper;
+    private TodoAdapter adapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -31,10 +35,13 @@ public class TodoListFragment extends Fragment {
             }
         });
 
-        this.items = new ArrayList<String>();
-
         ListView listView = (ListView) myView.findViewById(R.id.todoitems);
-        listView.setAdapter(new TodoAdapter(getContext(), items));
+
+        this.dbHelper = new TodoDatabaseHelper(getContext());
+        final ArrayList<Todo> allTodos = dbHelper.getTodos();
+
+        this.adapter = new TodoAdapter(getContext(), allTodos, dbHelper);
+        listView.setAdapter(adapter);
 
         return myView;
     }
@@ -50,7 +57,8 @@ public class TodoListFragment extends Fragment {
                     // callback for Ok button
                     @Override
                     public void onClick(DialogInterface dialog, int whichButton) {
-                        items.add(todoInput.getText().toString());
+                        Todo todo = dbHelper.createTodo(todoInput.getText().toString());
+                        adapter.add(todo);
                         dialog.dismiss();
                     }
                 }).setNegativeButton(R.string.todo_cancel_button_text, new DialogInterface.OnClickListener() {

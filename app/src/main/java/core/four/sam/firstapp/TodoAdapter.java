@@ -14,31 +14,33 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import core.four.sam.firstapp.database.Todo;
+import core.four.sam.firstapp.database.TodoDatabaseHelper;
 
 /**
  * Created by Sam on 9/17/2016.
  */
-public class TodoAdapter extends ArrayAdapter<String> {
+public class TodoAdapter extends ArrayAdapter<Todo> {
 
     private Context context;
-    private final ArrayList<String> items;
+    private final TodoDatabaseHelper dbHelper;
 
-    public TodoAdapter(Context context, ArrayList<String> items) {
-        super(context, 0, items);
+    public TodoAdapter(Context context, ArrayList<Todo> todos, TodoDatabaseHelper dbHelper) {
+        super(context, 0, todos);
         this.context = context;
-        this.items = items;
+        this.dbHelper = dbHelper;
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        String todoText = getItem(position);
+        final Todo todo = getItem(position);
 
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.item, parent, false);
         }
 
         TextView itemText = (TextView) convertView.findViewById(R.id.item_text);
-        itemText.setText(todoText);
+        itemText.setText(todo.getText());
 
         LinearLayout todoContainer = (LinearLayout) convertView.findViewById(R.id.todo_text_container);
         CheckBox todoComplete = (CheckBox) convertView.findViewById(R.id.complete_checkbox);
@@ -74,11 +76,10 @@ public class TodoAdapter extends ArrayAdapter<String> {
 
     // The actual callback function for editing an item
     public void editTodo(int position) {
-        final int index = position;
-        String todoText = items.get(position);
+        final Todo todo = getItem(position);
         final EditText todoInput = new EditText(context);
-        todoInput.setText(todoText);
-        todoInput.setSelection(todoText.length());
+        todoInput.setText(todo.getText());
+        todoInput.setSelection(todo.getText().length());
 
         AlertDialog.Builder builder = new AlertDialog.Builder(context)
                 .setView(todoInput)
@@ -87,7 +88,8 @@ public class TodoAdapter extends ArrayAdapter<String> {
                 .setPositiveButton(R.string.todo_ok_button_text, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        items.set(index, todoInput.getText().toString());
+                        todo.setText(todoInput.getText().toString());
+                        dbHelper.updateTodo(todo);
                         dialog.dismiss();
                     }
                 }).setNegativeButton(R.string.todo_cancel_button_text, new DialogInterface.OnClickListener() {
@@ -106,14 +108,15 @@ public class TodoAdapter extends ArrayAdapter<String> {
     public void markComplete(int position, View convertView) {
         final TodoAdapter adapter = this;
         final View view = convertView;
-        final int index = position;
+        final Todo todo = getItem(position);
         // Fade out and remove the item
         view.animate().alpha(0f).setDuration(500).withEndAction(new Runnable() {
             // Callback for when the transition completes so it's async
             @Override
             public void run() {
                 view.setVisibility(View.GONE);
-                items.remove(index);
+                remove(todo);
+                dbHelper.deleteTodo(todo);
                 adapter.notifyDataSetChanged();
             }
         });
