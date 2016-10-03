@@ -76,6 +76,7 @@ public class TodoDatabaseHelper extends SQLiteOpenHelper {
 
             allTodos.add(new Todo(id, text, isCompleted));
 
+            cursor.moveToNext();
         } while (!cursor.isLast());
 
         cursor.close();

@@ -109,6 +109,9 @@ public class TodoAdapter extends ArrayAdapter<Todo> {
         final TodoAdapter adapter = this;
         final View view = convertView;
         final Todo todo = getItem(position);
+        // Update the item and persist the change to the database
+        todo.setCompleted(true);
+        dbHelper.updateTodo(todo);
         // Fade out and remove the item
         view.animate().alpha(0f).setDuration(500).withEndAction(new Runnable() {
             // Callback for when the transition completes so it's async
