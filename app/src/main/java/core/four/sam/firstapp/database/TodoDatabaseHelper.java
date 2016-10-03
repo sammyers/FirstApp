@@ -9,7 +9,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import java.util.ArrayList;
 
 /**
- * Created by Sam on 9/29/2016.
+ * Other than the do-while loop, this entire class is very well done!
  */
 
 public class TodoDatabaseHelper extends SQLiteOpenHelper {
@@ -63,7 +63,11 @@ public class TodoDatabaseHelper extends SQLiteOpenHelper {
             return allTodos;
         }
 
-        do {
+        /* do-while loop is not the way to go here. When your database has 0 entries, the cursor will
+        still be trying to call cursor.getLong() first before checking if cursor.isLast(). Therefore,
+        you'll get a CursorIndexOutOfBoundsException. Using a normal while loop is the correct way here.
+         */
+        while (!cursor.isLast()) {
             long id = cursor.getLong(
                     cursor.getColumnIndex(TodoContract.TodoEntry._ID)
             );
@@ -76,7 +80,9 @@ public class TodoDatabaseHelper extends SQLiteOpenHelper {
 
             allTodos.add(new Todo(id, text, isCompleted));
 
-        } while (!cursor.isLast());
+            // Your database is crashing because your cursor is not being moved, and so this is an infinite while loop (never good).
+            cursor.moveToNext();
+        }
 
         cursor.close();
         db.close();
