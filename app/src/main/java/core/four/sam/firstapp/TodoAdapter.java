@@ -106,7 +106,8 @@ public class TodoAdapter extends ArrayAdapter<Todo> {
     }
 
     public void markComplete(int position, View convertView) {
-        final TodoAdapter adapter = this;
+
+        final TodoAdapter adapter = this; // This line is not necessary. You can call notifyDataSetChanged from anywhere.
         final View view = convertView;
         final Todo todo = getItem(position);
         // Fade out and remove the item
@@ -117,7 +118,7 @@ public class TodoAdapter extends ArrayAdapter<Todo> {
                 view.setVisibility(View.GONE);
                 remove(todo);
                 dbHelper.deleteTodo(todo);
-                adapter.notifyDataSetChanged();
+                notifyDataSetChanged();
             }
         });
     }
