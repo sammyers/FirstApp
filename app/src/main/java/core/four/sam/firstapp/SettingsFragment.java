@@ -1,5 +1,7 @@
 package core.four.sam.firstapp;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
@@ -17,15 +19,34 @@ public class SettingsFragment extends Fragment {
                              Bundle savedInstanceState) {
         final View myView = inflater.inflate(R.layout.fragment_settings, container, false);
 
-        final Integer[] settings = {R.id.background_red, R.id.background_blue, R.id.background_green};
-        final Integer[] colors = {Color.argb(255, 255, 0, 0), Color.argb(255, 0, 0, 255), Color.argb(255, 0, 255, 0)};
+        final SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
+
+        final Integer[] settings = {
+                R.id.background_red,
+                R.id.background_blue,
+                R.id.background_green,
+                R.id.background_reset
+        };
+        final Integer[] colors = {
+                Color.argb(255, 255, 0, 0),
+                Color.argb(255, 0, 0, 255),
+                Color.argb(255, 0, 255, 0),
+                Color.argb(255, 255, 255, 255)
+        };
+
+        int defaultValue = colors[colors.length - 1];
+        int background = sharedPref.getInt(getString(R.string.saved_background), defaultValue);
 
         for (int i = 0; i < settings.length; i++) {
             final int index = i;
             myView.findViewById(settings[i]).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    myView.setBackgroundColor(colors[index]);
+                    final int thisColor = colors[index];
+                    myView.setBackgroundColor(thisColor);
+                    SharedPreferences.Editor editor = sharedPref.edit();
+                    editor.putInt(getString(R.string.saved_background), thisColor);
+                    editor.commit();
                 }
             });
         }
