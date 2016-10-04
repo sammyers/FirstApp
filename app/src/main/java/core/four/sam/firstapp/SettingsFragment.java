@@ -36,6 +36,7 @@ public class SettingsFragment extends Fragment {
 
         int defaultValue = colors[colors.length - 1];
         int background = sharedPref.getInt(getString(R.string.saved_background), defaultValue);
+        myView.setBackgroundColor(background);
 
         for (int i = 0; i < settings.length; i++) {
             final int index = i;

@@ -112,16 +112,18 @@ public class TodoAdapter extends ArrayAdapter<Todo> {
         // Update the item and persist the change to the database
         todo.setCompleted(true);
         dbHelper.updateTodo(todo);
-        // Fade out and remove the item
-        view.animate().alpha(0f).setDuration(500).withEndAction(new Runnable() {
-            // Callback for when the transition completes so it's async
-            @Override
-            public void run() {
-                view.setVisibility(View.GONE);
-                remove(todo);
-                dbHelper.deleteTodo(todo);
-                adapter.notifyDataSetChanged();
-            }
-        });
+
+        // Fade out and remove the item (getting rid of this for now, since it's buggy)
+
+//        view.animate().alpha(0f).setDuration(500).withEndAction(new Runnable() {
+//            // Callback for when the transition completes so it's async
+//            @Override
+//            public void run() {
+//                view.setVisibility(View.GONE);
+//                remove(todo);
+//                dbHelper.deleteTodo(todo);
+//                adapter.notifyDataSetChanged();
+//            }
+//        });
     }
 }

@@ -1,7 +1,10 @@
 package core.four.sam.firstapp;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
@@ -34,6 +37,11 @@ public class TodoListFragment extends Fragment {
                 addTodo();
             }
         });
+
+        final SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
+        int defaultValue = Color.argb(255, 255, 255, 255);
+        int background = sharedPref.getInt(getString(R.string.saved_background), defaultValue);
+        myView.setBackgroundColor(background);
 
         ListView listView = (ListView) myView.findViewById(R.id.todoitems);
 
