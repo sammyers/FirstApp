@@ -5,6 +5,8 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center">
+
+    <!-- Use strings.xml -->
     <Button
         android:id="@+id/background_red"
         android:layout_width="wrap_content"
