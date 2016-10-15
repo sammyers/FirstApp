@@ -21,6 +21,7 @@ public class SettingsFragment extends Fragment {
 
         final SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
 
+        // These should be declared as class attributes since they're constant.
         final Integer[] settings = {
                 R.id.background_red,
                 R.id.background_blue,
@@ -38,6 +39,9 @@ public class SettingsFragment extends Fragment {
         int background = sharedPref.getInt(getString(R.string.saved_background), defaultValue);
         myView.setBackgroundColor(background);
 
+        // Here you're saving the color every time it is changed in the settings fragment. It is
+        // much more efficient to only save when the user exits the app, i.e. in the lifecycle
+        // onDestroy() method.
         for (int i = 0; i < settings.length; i++) {
             final int index = i;
             myView.findViewById(settings[i]).setOnClickListener(new View.OnClickListener() {
@@ -47,7 +51,7 @@ public class SettingsFragment extends Fragment {
                     myView.setBackgroundColor(thisColor);
                     SharedPreferences.Editor editor = sharedPref.edit();
                     editor.putInt(getString(R.string.saved_background), thisColor);
-                    editor.commit();
+                    editor.commit(); // Use editor.apply() instead
                 }
             });
         }
